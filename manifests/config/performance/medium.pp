@@ -1,5 +1,6 @@
 class mysql::config::performance::medium {
   mysql::config {
+    'datadir': value                        => $mysql::params::real_data_dir;
     'key_buffer': value                     => '16M';
     'max_allowed_packet': value             => '1M';
     'table_cache': value                    => '64';
