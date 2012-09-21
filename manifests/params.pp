@@ -21,7 +21,7 @@ class mysql::params {
   if ! $mysql::server::instance_type {
     $real_instance_type = 'medium'
   } else {
-    $real_data_dir = $mysql::server::instance_type
+    $real_instance_type = $mysql::server::instance_type
   }
 
   #$data_dir = $mysql_data_dir ? {
