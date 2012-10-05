@@ -80,7 +80,7 @@ class mysql::server::redhat {
 
   exec { 'init-rootpwd':
     unless  => "/usr/bin/test -f ${mysql::params::mylocalcnf}",
-    command => "/usr/bin/mysqladmin -u${real_mysql_user} password ${real_mysql_password}",
+    command => "/usr/bin/mysqladmin --user=${real_mysql_user} --password=${real_mysql_password}",
     notify  => Exec['gen-my.cnf'],
     require => [Package['mysql-server'], Service[$mysql::params::myservice]]
   }
