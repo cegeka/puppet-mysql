@@ -19,6 +19,12 @@ class mysql::params {
     $real_data_dir = $mysql::server::data_dir
   }
 
+  if $mysql::server::default_storage_engine in ['MyISAM', 'InnoDB', 'IBMDB2I', 'MERGE', 'MEMORY', 'EXAMPLE', 'FEDERATED', 'ARCHIVE', 'CSV', 'BLACKHOLE'] {
+    $real_default_storage_engine = $mysql::server::default_storage_engine
+  } else {
+    fail('Mysql::Params: parameter default_storage_engine must be one of the following: "MyISAM", "InnoDB", "IBMDB2I", "MERGE", "MEMORY", "EXAMPLE", "FEDERATED", "ARCHIVE", "CSV", "BLACKHOLE"')
+  }
+
   if ! $mysql::server::instance_type {
     $real_instance_type = 'medium'
   } else {
