@@ -26,7 +26,9 @@ class mysql::config::performance::medium {
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
-    mysql::config { 'innodb_file_per_table' : }
+    mysql::config { 'innodb_file_per_table' :
+      value => '1'
+    }
 
     if ( $mysql::params::real_innodb_buffer_pool_size != undef ) {
       mysql::config { 'innodb_buffer_pool_size' :
