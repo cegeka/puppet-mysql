@@ -1,9 +1,14 @@
 define mysql::database($ensure) {
-    if $::mysql_exists {
+
+  include  mysql::server
+
+  if $::mysql_exists {
     mysql_database { $name:
-      ensure => $ensure,
+      ensure  => $ensure,
+      require => Service[$mysql::params::myservice]
     }
-    } else {
-      fail("Mysql binary not found, Fact[::mysql_exists]:${::mysql_exists}")
-    }
+  } else {
+    fail("Mysql binary not found, Fact[::mysql_exists]:${::mysql_exists}")
+  }
+
 }

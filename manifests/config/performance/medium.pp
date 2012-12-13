@@ -24,4 +24,16 @@ class mysql::config::performance::medium {
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
   }
+
+  if ($mysql::params::real_default_storage_engine == 'InnoDB') {
+    mysql::config { 'innodb_file_per_table' :
+      value => '1'
+    }
+
+    if ( $mysql::params::real_innodb_buffer_pool_size != undef ) {
+      mysql::config { 'innodb_buffer_pool_size' :
+        value => $mysql::params::real_innodb_buffer_pool_size
+      }
+    }
+  }
 }

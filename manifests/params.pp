@@ -25,6 +25,8 @@ class mysql::params {
     fail('Mysql::Params: parameter default_storage_engine must be one of the following: "MyISAM", "InnoDB", "IBMDB2I", "MERGE", "MEMORY", "EXAMPLE", "FEDERATED", "ARCHIVE", "CSV", "BLACKHOLE"')
   }
 
+  $real_innodb_buffer_pool_size = $mysql::server::innodb_buffer_pool_size
+
   if ! $mysql::server::instance_type {
     $real_instance_type = 'medium'
   } else {
