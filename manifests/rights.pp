@@ -22,11 +22,12 @@ define mysql::rights($database, $user, $password, $host='localhost', $ensure='pr
 
   if $::mysql_exists {
     if $ensure == 'present' {
-      mysql_user { "${user}@${host}":
-        password_hash => mysql_password($password),
-        require       => File[$mysql::params::mylocalcnf],
+      if ! defined(Mysql_user ["${user}@${host}"]) {
+        mysql_user { "${user}@${host}":
+          password_hash => mysql_password($password),
+          require       => File[$mysql::params::mylocalcnf],
+        }
       }
-
       mysql_grant { "${user}@${host}/${database}":
         privileges  => $priv,
         require     => File[$mysql::params::mylocalcnf],
