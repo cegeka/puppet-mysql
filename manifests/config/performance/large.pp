@@ -10,9 +10,9 @@ class mysql::config::performance::large {
     'read_rnd_buffer_size': value           => '4M';
     'net_buffer_length': value              => '8K';
     'myisam_sort_buffer_size': value        => '8M';
-    'thread_cache_size': ensure             => '8';
-    'query_cache_size': ensure              => '16M';
-    'thread_concurrency': ensure            => '8';
+    'thread_cache_size': value              => '8';
+    'query_cache_size': value               => '16M';
+    'thread_concurrency': value             => '8';
     'thread_stack': ensure                  => absent;
     'mysqld_dump/max_allowed_packet': value => '16M';
     'isamchk/key_buffer': value             => '128M';
@@ -23,5 +23,16 @@ class mysql::config::performance::large {
     'myisamchk/sort_buffer_size': value     => '128M';
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
+  }
+  if ($mysql::params::real_default_storage_engine == 'InnoDB') {
+    mysql::config { 'innodb_file_per_table' :
+      value => '1'
+    }
+
+    if ( $mysql::params::real_innodb_buffer_pool_size != undef ) {
+      mysql::config { 'innodb_buffer_pool_size' :
+        value => $mysql::params::real_innodb_buffer_pool_size
+      }
+    }
   }
 }
