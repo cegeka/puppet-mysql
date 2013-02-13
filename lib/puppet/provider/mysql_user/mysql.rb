@@ -43,7 +43,7 @@ Puppet::Type.type(:mysql_user).provide(:mysql,
 	end
 
 	def mysql_flush 
-		mysqladmin defaults_file "flush-privileges"
+		mysqladmin defaults_file, "flush-privileges"
 	end
 
 	def query
