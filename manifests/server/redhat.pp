@@ -86,7 +86,7 @@ class mysql::server::redhat {
   }
 
   exec { 'gen-my.cnf':
-    command     => "/bin/echo -e \"[mysql]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}\n[mysqladmin]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}\n[mysqldump]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}\n[mysqlshow]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}\n\" > /root/.my.cnf",
+    command     => "/bin/echo -e \"[mysql]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}/mysql.sock\n[mysqladmin]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}/mysql.sock\n[mysqldump]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}\n[mysqlshow]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\nsocket=${$mysql::params::real_data_dir}/mysql.sock\n\" > /root/.my.cnf",
     refreshonly => true,
     creates     => '/root/.my.cnf'
   }
