@@ -26,7 +26,7 @@ define mysql::rights($database, $user, $password, $host='localhost', $ensure='pr
                                                         password_hash => mysql_password($password),
                                                         provider      => 'mysql',
                                                         require       => File[$mysql::params::mylocalcnf],
-                                                     })
+                                                      })
 
     if $ensure == 'present' {
       mysql_grant { "${user}@${host}/${database}":
