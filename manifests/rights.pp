@@ -21,18 +21,21 @@
 define mysql::rights($database, $user, $password, $host='localhost', $ensure='present', $priv='all') {
 
   if $::mysql_exists {
+
+    ensure_resource('mysql_user', "${user}@${host}", { ensure         => $ensure,
+                                                        password_hash => mysql_password($password),
+                                                        provider      => 'mysql',
+                                                        require       => File[$mysql::params::mylocalcnf],
+                                                     })
+
     if $ensure == 'present' {
-      if ! defined(Mysql_user ["${user}@${host}"]) {
-        mysql_user { "${user}@${host}":
-          password_hash => mysql_password($password),
-          require       => File[$mysql::params::mylocalcnf],
-        }
-      }
       mysql_grant { "${user}@${host}/${database}":
-        privileges  => $priv,
-        require     => File[$mysql::params::mylocalcnf],
+        privileges => $priv,
+        provider   => 'mysql',
+        require    => Mysql_user["${user}@${host}"],
       }
     }
+
     if $ensure == 'absent' {
       mysql_user { "${user}@${host}":
         ensure => absent
