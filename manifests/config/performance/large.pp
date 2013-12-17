@@ -43,7 +43,7 @@ class mysql::config::performance::large {
   }
   else {
     mysql::config { 'table_open_cache' :
-      value => '64'
+      value => '256'
     }
   }
 }
