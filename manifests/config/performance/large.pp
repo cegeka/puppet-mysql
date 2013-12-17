@@ -4,7 +4,7 @@ class mysql::config::performance::large {
     'default-storage-engine': value         => $mysql::params::real_default_storage_engine;
     'key_buffer': value                     => '256M';
     'max_allowed_packet': value             => '25M';
-    'table_cache': value                    => '256';
+    'table_open_cache': value               => '256';
     'sort_buffer_size': value               => '1M';
     'read_buffer_size': value               => '1M';
     'read_rnd_buffer_size': value           => '4M';
