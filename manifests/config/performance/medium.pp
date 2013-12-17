@@ -4,7 +4,6 @@ class mysql::config::performance::medium {
     'default-storage-engine': value         => $mysql::params::real_default_storage_engine;
     'key_buffer': value                     => '16M';
     'max_allowed_packet': value             => '1M';
-    'table_open_cache': value               => '64';
     'sort_buffer_size': value               => '512K';
     'read_buffer_size': value               => '256K';
     'read_rnd_buffer_size': value           => '512K';
@@ -35,6 +34,17 @@ class mysql::config::performance::medium {
       mysql::config { 'innodb_buffer_pool_size' :
         value => $mysql::params::real_innodb_buffer_pool_size
       }
+    }
+  }
+
+  if ( $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^5\./ ) {
+    mysql::config { 'table_cache' :
+      value => '64'
+    }
+  }
+  else {
+    mysql::config { 'table_open_cache' :
+      value => '64'
     }
   }
 }
