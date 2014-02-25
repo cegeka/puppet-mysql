@@ -10,7 +10,7 @@ class mysql::server::redhat {
 
   package { 'mysql-server':
     ensure  => installed,
-    require => ['/etc/my.cnf']
+    require => File['/etc/my.cnf']
   }
 
   service { $mysql::params::myservice:
