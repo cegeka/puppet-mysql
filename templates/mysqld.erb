@@ -48,7 +48,7 @@ get_mysql_option(){
         fi
 }
 
-get_mysql_option mysqld datadir "<%= mysql::params::real_data_dir %>"
+get_mysql_option mysqld datadir "<%= scope.lookupvar('mysql::params::real_data_dir') %>"
 datadir="$result"
 get_mysql_option mysqld socket "$datadir/mysql.sock"
 socketfile="$result"
