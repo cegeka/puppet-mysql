@@ -9,7 +9,8 @@ class mysql::server::redhat {
   }
 
   package { 'mysql-server':
-    ensure => installed,
+    ensure  => installed,
+    require => ['/etc/my.cnf']
   }
 
   service { $mysql::params::myservice:
@@ -17,7 +18,7 @@ class mysql::server::redhat {
     enable      => true,
     hasrestart  => true,
     hasstatus   => true,
-    require     => Package['mysql-server'],
+    require     => [ Package['mysql-server'], File['/etc/init.d/mysqld'] ],
   }
 
   file { $mysql::params::real_data_dir :
@@ -33,7 +34,14 @@ class mysql::server::redhat {
     owner   => root,
     group   => root,
     mode    => '0644',
-    require => Package['mysql-server'],
+  }
+
+  file { '/etc/init.d/mysqld':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    content => template("${module_name}/mysqld.erb")
   }
 
   file { '/etc/logrotate.d/mysql-server':
