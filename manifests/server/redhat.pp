@@ -8,7 +8,7 @@ class mysql::server::redhat {
     default: { fail('Unknown instance type') }
   }
 
-  package { 'mysql-server':
+  package { ['mysql-server', 'mysql-libs']:
     ensure  => installed,
     require => File['/etc/my.cnf']
   }
@@ -18,14 +18,14 @@ class mysql::server::redhat {
     enable      => true,
     hasrestart  => true,
     hasstatus   => true,
-    require     => [ Package['mysql-server'], File['/etc/init.d/mysqld'] ],
+    require     => [ Package['mysql-server'], Package['mysql-libs'], File['/etc/init.d/mysqld'] ],
   }
 
   file { $mysql::params::real_data_dir :
     ensure  => directory,
     owner   => 'mysql',
     group   => 'mysql',
-    require => Package['mysql-server'],
+    require => [ Package['mysql-server'], Package['mysql-libs'] ],
   }
 
   file { '/etc/my.cnf':
@@ -88,9 +88,9 @@ class mysql::server::redhat {
 
   exec { 'init-rootpwd':
     unless  => "/usr/bin/test -f ${mysql::params::mylocalcnf}",
-    command => "/usr/bin/mysqladmin -u${real_mysql_user} password \"${real_mysql_password}\"",
+    command => "/usr/bin/mysqladmin -S ${mysql::params::real_data_dir}/mysql.sock -u${real_mysql_user} password \"${real_mysql_password}\"",
     notify  => Exec['gen-my.cnf'],
-    require => [Package['mysql-server'], Service[$mysql::params::myservice]]
+    require => [ Package['mysql-server'], Package['mysql-libs'], Service[$mysql::params::myservice] ]
   }
 
   exec { 'gen-my.cnf':
@@ -98,5 +98,4 @@ class mysql::server::redhat {
     refreshonly => true,
     creates     => '/root/.my.cnf'
   }
-
 }
