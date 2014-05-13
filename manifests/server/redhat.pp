@@ -8,7 +8,7 @@ class mysql::server::redhat {
     default: { fail('Unknown instance type') }
   }
 
-  if $mysql_libs_obsolete {
+  if $mysql::server::mysql_libs_obsolete {
     $mysql_server_dependencies = ['mysql-server']
   } else {
     $mysql_server_dependencies = ['mysql-server', 'mysql-libs']
