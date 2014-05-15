@@ -24,6 +24,7 @@ class mysql::config::performance::large {
     'myisamchk/sort_buffer_size': value     => '128M';
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
+    'client/socket': value                  => "${mysql::params::real_data_dir}/mysql.sock";
   }
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
     mysql::config { 'innodb_file_per_table' :

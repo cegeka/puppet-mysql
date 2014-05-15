@@ -5,9 +5,13 @@ class mysql::params {
     default                 => '/etc/mysql/my.cnf',
   }
 
-  $myservice = $::operatingsystem ? {
-    /RedHat|Fedora|CentOS/  => 'mysqld',
-    default                 => 'mysql',
+  if $mysql::server::mysql_service_name_override {
+    $myservice = $mysql::server::mysql_service_name_override
+  } else {
+    $myservice = $::operatingsystem ? {
+      /RedHat|Fedora|CentOS/  => 'mysqld',
+      default                 => 'mysql',
+    }
   }
 
   $mycnfctx = "/files${mycnf}"
