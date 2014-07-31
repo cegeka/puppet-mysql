@@ -29,7 +29,8 @@ class mysql::config::performance::large {
   if ($mysql::params::enable_log_bin == 'true') {
     mysql::config { 'log_bin' :
       value => $::fqdn
-  } 
+    }
+  }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
     mysql::config { 'innodb_file_per_table' :

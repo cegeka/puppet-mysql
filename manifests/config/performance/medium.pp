@@ -29,6 +29,7 @@ class mysql::config::performance::medium {
   if ($mysql::params::enable_log_bin == 'true') {
     mysql::config { 'log_bin' :
       value => $::fqdn
+    }
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
