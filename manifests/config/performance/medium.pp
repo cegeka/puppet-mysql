@@ -14,7 +14,6 @@ class mysql::config::performance::medium {
     'query_cache_size': ensure              => absent;
     'thread_concurrency': ensure            => absent;
     'thread_stack': ensure                  => absent;
-    'log_bin': value                        => $::fqdn;
     'mysqld_dump/max_allowed_packet': value => '16M';
     'isamchk/key_buffer': value             => '20M';
     'isamchk/sort_buffer_size': value       => '20M';
@@ -25,6 +24,11 @@ class mysql::config::performance::medium {
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
     'client/socket': value                  => "${mysql::params::real_data_dir}/mysql.sock";
+  }
+
+  if ($mysql::params::enable_log_bin == 'true') {
+    mysql::config { 'log_bin' :
+      value => $::fqdn
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
