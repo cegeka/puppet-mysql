@@ -34,6 +34,7 @@ class mysql::config::performance::medium {
     if ($mysql::params::expire_logs_days != undef) {
       mysql::config { 'expire_logs_days' :
         value => $mysql::params::expire_logs_days
+      }
     }
   }
 
