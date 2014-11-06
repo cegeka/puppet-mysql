@@ -43,6 +43,8 @@ class mysql::params {
     $enable_log_bin = 'false'
   }
 
+  $expire_logs_days = $mysql::server::expire_logs_days
+
   #$replication_binlog_format = $replication_binlog_format ? {
   #  ''      => 'STATEMENT',
   #  default => $replication_binlog_format,

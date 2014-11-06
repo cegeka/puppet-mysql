@@ -30,6 +30,11 @@ class mysql::config::performance::large {
     mysql::config { 'log_bin' :
       value => $::fqdn
     }
+
+    if ($mysql::params::expire_logs_days != undef) {
+      mysql::config { 'expire_logs_days' :
+        value => $mysql::params::expire_logs_days
+    }
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
