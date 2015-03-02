@@ -14,6 +14,7 @@ class mysql::config::performance::large {
     'thread_concurrency': value             => '8';
     'thread_stack': ensure                  => absent;
     'log_bin': value                        => $::fqdn;
+    'expire_logs_days': value               => '3';
     'mysqld_dump/max_allowed_packet': value => '16M';
     'isamchk/key_buffer': value             => '128M';
     'isamchk/sort_buffer_size': value       => '128M';
