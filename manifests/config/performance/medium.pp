@@ -1,6 +1,7 @@
 class mysql::config::performance::medium {
   mysql::config {
     'datadir': value                        => $mysql::params::real_data_dir;
+    'socket': value                         => "${mysql::params::real_data_dir}/mysql.sock";
     'default-storage-engine': value         => $mysql::params::real_default_storage_engine;
     'key_buffer': value                     => '16M';
     'max_allowed_packet': value             => '1M';
@@ -24,6 +25,19 @@ class mysql::config::performance::medium {
     'myisamchk/sort_buffer_size': value     => '20M';
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
+    'client/socket': value                  => "${mysql::params::real_data_dir}/mysql.sock";
+  }
+
+  if ($mysql::params::enable_log_bin == 'true') {
+    mysql::config { 'log_bin' :
+      value => $::fqdn
+    }
+
+    if ($mysql::params::expire_logs_days != undef) {
+      mysql::config { 'expire_logs_days' :
+        value => $mysql::params::expire_logs_days
+      }
+    }
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
