@@ -37,14 +37,6 @@ class mysql::params {
     $real_instance_type = $mysql::server::instance_type
   }
 
-  if $mysql::server::enable_log_bin == 'true' {
-    $enable_log_bin = 'true'
-  } else {
-    $enable_log_bin = 'false'
-  }
-
-  $expire_logs_days = $mysql::server::expire_logs_days
-
   #$replication_binlog_format = $replication_binlog_format ? {
   #  ''      => 'STATEMENT',
   #  default => $replication_binlog_format,

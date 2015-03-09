@@ -1,4 +1,5 @@
 class mysql::server::redhat {
+
   include mysql::params
 
   case $mysql::params::real_instance_type {
@@ -113,4 +114,5 @@ class mysql::server::redhat {
     refreshonly => true,
     creates     => '/root/.my.cnf'
   }
+
 }

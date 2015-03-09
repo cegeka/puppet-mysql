@@ -1,4 +1,5 @@
 class mysql::config::performance::large {
+
   mysql::config {
     'datadir': value                        => $mysql::params::real_data_dir;
     'socket': value                         => "${mysql::params::real_data_dir}/mysql.sock";
@@ -14,8 +15,8 @@ class mysql::config::performance::large {
     'query_cache_size': value               => '16M';
     'thread_concurrency': value             => '8';
     'thread_stack': ensure                  => absent;
-    'log_bin': value                        => $::fqdn;
-    'expire_logs_days': value               => '3';
+    'log_bin': value                        => $mysql::server::log_bin;
+    'expire_logs_days': value               => $mysql::server::expire_logs_days;
     'mysqld_dump/max_allowed_packet': value => '16M';
     'isamchk/key_buffer': value             => '128M';
     'isamchk/sort_buffer_size': value       => '128M';
@@ -26,18 +27,6 @@ class mysql::config::performance::large {
     'myisamchk/read_buffer': value          => '2M';
     'myisamchk/write_buffer': value         => '2M';
     'client/socket': value                  => "${mysql::params::real_data_dir}/mysql.sock";
-  }
-
-  if ($mysql::params::enable_log_bin == 'true') {
-    mysql::config { 'log_bin' :
-      value => $::fqdn
-    }
-
-    if ($mysql::params::expire_logs_days != undef) {
-      mysql::config { 'expire_logs_days' :
-        value => $mysql::params::expire_logs_days
-      }
-    }
   }
 
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
@@ -62,4 +51,5 @@ class mysql::config::performance::large {
       value => '256'
     }
   }
+
 }
