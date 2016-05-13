@@ -1,11 +1,11 @@
 require 'spec_helper_acceptance'
 
-describe 'mysql' do
+describe 'mysql::server' do
 
   describe 'running puppet code' do
     it 'should work with no errors' do
       pp = <<-EOS
-        include ::mysql
+        include ::mysql::server
       EOS
 
       # Run it twice and test for idempotency
