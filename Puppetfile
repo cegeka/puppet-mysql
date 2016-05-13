@@ -1,2 +1,2 @@
 mod 'mysql',
-  :git => 'https://github.com/cegeka/puppet-jenkins'
+  :git => 'https://github.com/cegeka/puppet-mysql'
