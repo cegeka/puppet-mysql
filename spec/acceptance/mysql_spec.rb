@@ -13,12 +13,9 @@ describe 'mysql::server' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-    it { is_expected.to contain_package('mysql-server') }
-    it { is_expected.to contain_service('mysqld') }
-
     describe file '/etc/my.cnf' do
       it { is_expected.to be_file }
-      its(:content) { should contain /mysql/ }
+      its(:content) { should contain /mysqld/ }
     end
 
   end
