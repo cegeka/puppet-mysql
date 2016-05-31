@@ -9,10 +9,14 @@ class mysql::server::redhat {
     default: { fail('Unknown instance type') }
   }
 
-  if $mysql::server::mysql_libs_obsolete {
-    $mysql_server_dependencies = ['mysql-server']
+  if ($mysql::server::implementation == 'mariadb') {
+    $mysql_server_dependencies = ['mariadb-server']
   } else {
-    $mysql_server_dependencies = ['mysql-server', 'mysql-libs']
+    if $mysql::server::mysql_libs_obsolete {
+      $mysql_server_dependencies = ['mysql-server']
+    } else {
+      $mysql_server_dependencies = ['mysql-server', 'mysql-libs']
+    }
   }
 
   package { $mysql_server_dependencies:
