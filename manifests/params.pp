@@ -9,7 +9,7 @@ class mysql::params {
     $myservice = $mysql::server::mysql_service_name_override
   } else {
     if ($mysql::server::implementation == 'mariadb') {
-      $myservice = 'mariadb';
+      $myservice = 'mariadb'
     } else {
       $myservice = $::operatingsystem ? {
         /RedHat|Fedora|CentOS/  => 'mysqld',
