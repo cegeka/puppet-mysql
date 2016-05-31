@@ -6,7 +6,8 @@ class mysql::server (
   $mysql_libs_obsolete=false,
   $mysql_service_name_override=undef,
   $log_bin=$::fqdn,
-  $expire_logs_days='3'
+  $expire_logs_days='3',
+  $implementation=undef
 ) {
 
   case $::operatingsystem {
