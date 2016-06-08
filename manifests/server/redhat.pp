@@ -11,7 +11,7 @@ class mysql::server::redhat {
 
   if ($mysql::server::implementation == 'mariadb') {
     $mysql_server_dependencies = ['mariadb-server']
-  } else if ($mysql::server::implementation == 'mysql-community') {
+  } elsif ($mysql::server::implementation == 'mysql-community') {
     $mysql_server_dependencies = ['mysql-community-server']
   } else {
     if $mysql::server::mysql_libs_obsolete {
