@@ -58,6 +58,15 @@ class mysql::server::redhat {
     require => Package[$mysql_server_dependencies],
   }
 
+  file { '/etc/sysconfig/mysqld':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template("${module_name}/mysqld.sysconfig.erb"),
+    require => Package[$mysql_server_dependencies],
+  }
+
   file { '/var/run/mysqld':
     ensure  => directory,
     owner   => mysql,
