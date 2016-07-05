@@ -1,11 +1,13 @@
 require 'spec_helper_acceptance'
 
-describe 'mysql::server' do
+describe 'mysql::database' do
 
   describe 'running puppet code' do
     it 'should work with no errors' do
       pp = <<-EOS
-        include ::mysql::server
+        class { '::mysql::server':
+            data_dir => '/data/',
+        }
       EOS
 
       # Run it twice and test for idempotency
@@ -15,7 +17,7 @@ describe 'mysql::server' do
 
     describe file '/etc/my.cnf' do
       it { is_expected.to be_file }
-      its(:content) { should contain /mysqld/ }
+      its(:content) { should contain /data/ }
     end
 
     describe process('mysqld') do
