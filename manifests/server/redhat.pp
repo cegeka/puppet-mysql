@@ -31,7 +31,7 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"] ],
+    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"], File["/etc/my.cnf"]],
   }
 
   file { $mysql::params::real_data_dir :
