@@ -20,39 +20,39 @@ class mysql::server::redhat {
       $mysql_server_dependencies = ['mysql-server', 'mysql-libs']
     }
   }
-
-  file { $mysql::params::real_data_dir :
-    ensure => directory,
-    owner  => 'mysql',
-    group  => 'mysql',
-  }
-
-  file { '/var/run/mysqld':
-    ensure => directory,
-    owner  => mysql,
-    group  => mysql,
-    mode   => '0755',
-  }
-
-  package { $mysql_server_dependencies:
-    ensure  => installed,
-    require => [File['/var/run/mysqld'], File[$mysql::params::real_data_dir]]
-  }
-
   file { '/etc/sysconfig/mysqld':
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("${module_name}/mysqld.sysconfig.erb"),
-    require => Package[$mysql_server_dependencies],
   }
+
+  package { $mysql_server_dependencies:
+    ensure  => installed,
+    require => File['/etc/sysconfig/mysqld']
+  }
+
+  file { $mysql::params::real_data_dir :
+    ensure  => directory,
+    owner   => 'mysql',
+    group   => 'mysql',
+    require => Package[$mysql_server_dependencies]
+  }
+
+  file { '/var/run/mysqld':
+    ensure  => directory,
+    owner   => mysql,
+    group   => mysql,
+    mode    => '0755',
+    require => Package[$mysql_server_dependencies]
+  }
+  
   file { '/etc/logrotate.d/mysql-server':
     ensure  => present,
     content => template('mysql/logrotate.redhat.erb'),
     require => Package[$mysql_server_dependencies],
   }
-
 
   file { "/etc/init.d/${mysql::params::myservice}":
     ensure  => present,
