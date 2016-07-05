@@ -21,42 +21,22 @@ class mysql::server::redhat {
     }
   }
 
+  file { $mysql::params::real_data_dir :
+    ensure => directory,
+    owner  => 'mysql',
+    group  => 'mysql',
+  }
+
+  file { '/var/run/mysqld':
+    ensure => directory,
+    owner  => mysql,
+    group  => mysql,
+    mode   => '0755',
+  }
+
   package { $mysql_server_dependencies:
     ensure  => installed,
-    require => File['/etc/my.cnf']
-  }
-
-  service { $mysql::params::myservice:
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"]],
-  }
-
-  file { $mysql::params::real_data_dir :
-    ensure  => directory,
-    owner   => 'mysql',
-    group   => 'mysql',
-    require => Package[$mysql_server_dependencies],
-  }
-
-  file { '/etc/my.cnf':
-    ensure => present,
-    path   => $mysql::params::mycnf,
-    owner  => root,
-    group  => root,
-    mode   => '0644',
-    before => Service[$mysql::params::myservice]
-  }
-
-  file { "/etc/init.d/${mysql::params::myservice}":
-    ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    content => template("${module_name}/mysqld.erb"),
-    require => [ File['/etc/my.cnf'], Package[$mysql_server_dependencies] ],
+    require => [File['/var/run/mysqld'], File[$mysql::params::real_data_dir]]
   }
 
   file { '/etc/sysconfig/mysqld':
@@ -67,19 +47,39 @@ class mysql::server::redhat {
     content => template("${module_name}/mysqld.sysconfig.erb"),
     require => Package[$mysql_server_dependencies],
   }
-
-  file { '/var/run/mysqld':
-    ensure  => directory,
-    owner   => mysql,
-    group   => mysql,
-    mode    => '0755',
-    require => Package[$mysql_server_dependencies],
-  }
-
   file { '/etc/logrotate.d/mysql-server':
     ensure  => present,
     content => template('mysql/logrotate.redhat.erb'),
+    require => Package[$mysql_server_dependencies],
   }
+
+
+  file { "/etc/init.d/${mysql::params::myservice}":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    content => template("${module_name}/mysqld.erb"),
+    require => [Package[$mysql_server_dependencies] ],
+  }
+
+  file { '/etc/my.cnf':
+    ensure  => present,
+    path    => $mysql::params::mycnf,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => [Package[$mysql_server_dependencies] ],
+  }
+
+  service { $mysql::params::myservice:
+    ensure     => running,
+    enable     => true,
+    hasrestart => true,
+    hasstatus  => true,
+    require    => File['/etc/my.cnf'],
+  }
+
 
   if $mysql::params::mysql_user { $real_mysql_user = $mysql::params::mysql_user } else { $real_mysql_user = 'root' }
 
@@ -122,7 +122,7 @@ class mysql::server::redhat {
     unless  => "/usr/bin/test -f ${mysql::params::mylocalcnf}",
     command => "/usr/bin/mysqladmin -S ${mysql::params::real_data_dir}/mysql.sock -u${real_mysql_user} password \"${real_mysql_password}\"",
     notify  => Exec['gen-my.cnf'],
-    require => [ Package[$mysql_server_dependencies], Service[$mysql::params::myservice], File['/etc/my.cnf'] ]
+    require => [Service[$mysql::params::myservice]]
   }
 
   exec { 'gen-my.cnf':
