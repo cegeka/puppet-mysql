@@ -23,7 +23,7 @@ class mysql::server::redhat {
 
   package { $mysql_server_dependencies:
     ensure  => installed,
-    require => File['/etc/my.cnf']
+    require => File['my.cnf']
   }
 
   service { $mysql::params::myservice:
@@ -31,7 +31,7 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"], File["/etc/my.cnf"]],
+    require    => [Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"]],
   }
 
   file { $mysql::params::real_data_dir :
@@ -41,12 +41,14 @@ class mysql::server::redhat {
     require => Package[$mysql_server_dependencies],
   }
 
-  file { '/etc/my.cnf':
+  file { 'my.cnf':
     ensure => present,
     path   => $mysql::params::mycnf,
     owner  => root,
     group  => root,
     mode   => '0644',
+    before => Service[$mysql::params::myservice],
+    target => '/etc/my.cnf'
   }
 
   file { "/etc/init.d/${mysql::params::myservice}":
@@ -121,7 +123,7 @@ class mysql::server::redhat {
     unless  => "/usr/bin/test -f ${mysql::params::mylocalcnf}",
     command => "/usr/bin/mysqladmin -S ${mysql::params::real_data_dir}/mysql.sock -u${real_mysql_user} password \"${real_mysql_password}\"",
     notify  => Exec['gen-my.cnf'],
-    require => [ Package[$mysql_server_dependencies], Service[$mysql::params::myservice] ]
+    require => [ Package[$mysql_server_dependencies], Service[$mysql::params::myservice], File['my.cnf'] ]
   }
 
   exec { 'gen-my.cnf':
