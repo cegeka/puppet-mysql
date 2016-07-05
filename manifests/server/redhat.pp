@@ -56,7 +56,7 @@ class mysql::server::redhat {
     group   => root,
     mode    => '0755',
     content => template("${module_name}/mysqld.erb"),
-    require => Package[$mysql_server_dependencies],
+    require => [ File['/etc/my.cnf', Package[$mysql_server_dependencies] ],
   }
 
   file { '/etc/sysconfig/mysqld':
