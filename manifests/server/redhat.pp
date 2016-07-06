@@ -77,7 +77,7 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => File['/etc/my.cnf'],
+    require    => [ File['/etc/my.cnf'], Augeas["${mysql::params::mycnfctx}/${section}/${name}"] ]
   }
 
 
