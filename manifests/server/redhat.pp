@@ -63,12 +63,13 @@ class mysql::server::redhat {
     require => [Package[$mysql_server_dependencies] ],
   }
 
-  file { '/etc/my.cnf':
+  file { 'my.cnf':
     ensure  => present,
     path    => $mysql::params::mycnf,
     owner   => root,
     group   => root,
     mode    => '0644',
+    target  => '/etc/my.cnf'
     require => [Package[$mysql_server_dependencies] ],
   }
 
@@ -77,7 +78,7 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => File['/etc/my.cnf'],
+    require    => File['my.cnf'],
   }
 
 
