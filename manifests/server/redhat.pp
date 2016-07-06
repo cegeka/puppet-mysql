@@ -60,17 +60,17 @@ class mysql::server::redhat {
     group   => root,
     mode    => '0755',
     content => template("${module_name}/mysqld.erb"),
-    require => Package[$mysql_server_dependencies],
+    require => [Package[$mysql_server_dependencies] ],
   }
 
-  file { 'my.cnf':
+  file { '/etc/my.cnf':
     ensure  => present,
     path    => $mysql::params::mycnf,
     owner   => root,
     group   => root,
     mode    => '0644',
-    target  => '/etc/my.cnf',
-    require => Package[$mysql_server_dependencies],
+    target  => '/etc/my.cnf'
+    require => [Package[$mysql_server_dependencies]],
   }
 
   service { $mysql::params::myservice:
@@ -78,7 +78,7 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => File['my.cnf'],
+    require    => File['/etc/my.cnf'],
   }
 
 

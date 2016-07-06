@@ -58,6 +58,7 @@ augeas { "${mysql::params::mycnfctx}/${section}/${name}":
     "rm ${mysql::params::mycnfctx}/target[count(*)=0]",
   ],
   require => [ File[ $mysql::params::mycnf ], File[ $mysql::params::real_data_dir ] ],
+  before  => Service[ $mysql::params::myservice ],
   notify  => Service[ $mysql::params::myservice ],
   }
 }
