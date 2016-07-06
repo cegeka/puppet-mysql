@@ -69,7 +69,6 @@ class mysql::server::redhat {
     owner   => root,
     group   => root,
     mode    => '0644',
-    target  => '/etc/my.cnf',
     require => Package[$mysql_server_dependencies],
   }
 
