@@ -4,10 +4,11 @@
 #
 # Example usage:
 #  mysql::rights { "example case":
-#    user     => "foo",
-#    password => "bar",
-#    database => "mydata",
-#    priv    => ["select_priv", "update_priv"]
+#    user       => "foo",
+#    password   => "bar",
+#    database   => "mydata",
+#    priv       => ["select_priv", "update_priv"],
+#    sectret_id => 123456
 #  }
 #
 #Available parameters:
@@ -15,25 +16,37 @@
 #- *$database*: the target database
 #- *$user*: the target user
 #- *$password*: user's password
+#- *$secret_id*: the ID for PIM
 #- *$host*: target host, default to "localhost"
 #- *$priv*: target privileges, defaults to "all" (values are the fieldnames from mysql.db table).
 
 define mysql::rights(
   $database,
   $user,
-  $password,
+  $password=undef,
+  $secret_id=undef,
   $host='localhost',
   $ensure='present',
   $priv='all'
 ) {
 
   if $::mysql_exists {
+    if $secret_id == undef and $password == undef {
+      fail("You must privide a password or a secret_id to ::mysql::rights")
+    }
 
-    ensure_resource('mysql_user', "${user}@${host}", { ensure         => $ensure,
-                                                        password_hash => mysql_password($password),
-                                                        provider      => 'mysql',
-                                                        require       => File[$mysql::params::mylocalcnf],
-                                                      })
+    if $secret_id != undef {
+      $mysql_password = getsecret($secret_id, 'Password')
+    } else {
+      $mysql_password = $password
+    }
+
+    ensure_resource('mysql_user', "${user}@${host}", {
+      ensure        => $ensure,
+      password_hash => mysql_password($mysql_password),
+      provider      => 'mysql',
+      require       => File[$mysql::params::mylocalcnf],
+    })
 
     if $ensure == 'present' {
       mysql_grant { "${user}@${host}/${database}":
@@ -51,6 +64,4 @@ define mysql::rights(
   } else {
     fail("Mysql binary not found, Fact[::mysql_exists]:${::mysql_exists}")
   }
-
-
 }
