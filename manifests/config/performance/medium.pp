@@ -1,8 +1,6 @@
 class mysql::config::performance::medium {
 
   mysql::config {
-    'datadir': value                        => $mysql::params::real_data_dir;
-    'socket': value                         => "${mysql::params::real_data_dir}/mysql.sock";
     'default-storage-engine': value         => $mysql::params::real_default_storage_engine;
     'key_buffer': value                     => '16M';
     'max_allowed_packet': value             => '1M';
