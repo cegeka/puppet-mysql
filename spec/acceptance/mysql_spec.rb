@@ -18,6 +18,9 @@ describe 'mysql::server' do
       its(:content) { should contain /mysqld/ }
     end
 
+    describe process('mysqld') do
+      it { should be_running }
+    end
   end
 end
 

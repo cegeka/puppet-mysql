@@ -21,7 +21,10 @@ describe 'mysql::database' do
       it { is_expected.to be_file }
       its(:content) { should contain /mysqld/ }
     end
-
+    
+    describe process('mysqld') do
+      it { should be_running }
+    end
   end
 end
 
