@@ -1,5 +1,5 @@
 = puppet-mysql module
 
-{<img src='https://codex.cegeka.be/jenkins/job/puppet-mysql/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-mysql/]
+{<img src='https://jenkins-iac.cegeka.be/job/puppet-mysql/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-mysql/]
 
 This is the mysql module.
