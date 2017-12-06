@@ -56,11 +56,6 @@ define mysql::rights(
       }
     }
 
-    if $ensure == 'absent' {
-      mysql_user { "${user}@${host}":
-        ensure => absent
-      }
-    }
   } else {
     fail("Mysql binary not found, Fact[::mysql_exists]:${::mysql_exists}")
   }
