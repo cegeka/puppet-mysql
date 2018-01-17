@@ -3,9 +3,9 @@ class mysql::server::redhat {
   include mysql::params
 
   case $mysql::params::real_instance_type {
-    small: { include mysql::config::performance::small }
-    medium: { include mysql::config::performance::medium }
-    large: { include mysql::config::performance::large }
+    'small': { include mysql::config::performance::small }
+    'medium': { include mysql::config::performance::medium }
+    'large': { include mysql::config::performance::large }
     default: { fail('Unknown instance type') }
   }
 
