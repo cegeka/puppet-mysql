@@ -1,3 +1,7 @@
+# Class: mysql::server::redhat
+#
+# Usage: this class should not be called directly
+#
 class mysql::server::redhat {
 
   include mysql::params
