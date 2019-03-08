@@ -19,9 +19,17 @@ class mysql::server::redhat {
     $mysql_server_dependencies = ['mysql-community-server']
   } else {
     if $mysql::server::mysql_libs_obsolete {
-      $mysql_server_dependencies = ['mysql-server']
+      case $::operatingsystemmajrelease {
+        6: { $mysql_server_dependencies = ['mysql-server'] }
+        7: { $mysql_server_dependencies = ['mariadb'] }
+        default: { fail('Unsupported OS major release') }
+      }
     } else {
-      $mysql_server_dependencies = ['mysql-server', 'mysql-libs']
+      case $::operatingsystemmajrelease {
+        6: { $mysql_server_dependencies = ['mysql-server','mysql-libs'] }
+        7: { $mysql_server_dependencies = ['mariadb','mariadb-libs'] }
+        default: { fail('Unsupported OS major release') }
+      }
     }
   }
 
