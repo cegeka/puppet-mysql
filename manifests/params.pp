@@ -1,3 +1,7 @@
+# Class: mysql::params
+#
+# Usage: this class should not be called directly
+#
 class mysql::params {
 
   $mycnf = $::operatingsystem ? {
