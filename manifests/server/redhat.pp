@@ -31,14 +31,20 @@ class mysql::server::redhat {
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"] ],
+    require    => [ Package[$mysql_server_dependencies], File["/etc/init.d/${mysql::params::myservice}"], File[$mysql::params::real_data_dir], File_line['selinux_context_mysql_datadir'] ],
+  }
+
+  file_line { 'selinux_context_mysql_datadir':
+    path => '/etc/selinux/targeted/contexts/files/file_contexts.local',
+    line => "${mysql::params::real_data_dir}(/.*)? system_u:object_r:mysqld_db_t:s0"
   }
 
   file { $mysql::params::real_data_dir :
     ensure  => directory,
     owner   => 'mysql',
     group   => 'mysql',
-    require => Package[$mysql_server_dependencies],
+    seltype => 'mysqld_db_t',
+    require => [ Package[$mysql_server_dependencies], File_line['selinux_context_mysql_datadir'] ],
   }
 
   file { '/etc/my.cnf':
