@@ -38,7 +38,7 @@ class mysql::server::redhat {
     require => File['/etc/my.cnf']
   }
 
-  if $::selinux {
+  if $::selinux == 'true' {
     service { $mysql::params::myservice:
       ensure     => running,
       enable     => true,
