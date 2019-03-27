@@ -21,13 +21,13 @@ class mysql::server::redhat {
     if $mysql::server::mysql_libs_obsolete {
       case $::operatingsystemmajrelease {
         '6': { $mysql_server_dependencies = ['mysql-server'] }
-        '7': { $mysql_server_dependencies = ['mariadb'] }
+        '7': { $mysql_server_dependencies = ['mariadb-server'] }
         default: { fail('Unsupported OS major release') }
       }
     } else {
       case $::operatingsystemmajrelease {
         '6': { $mysql_server_dependencies = ['mysql-server','mysql-libs'] }
-        '7': { $mysql_server_dependencies = ['mariadb','mariadb-libs'] }
+        '7': { $mysql_server_dependencies = ['mariadb-server','mariadb-libs'] }
         default: { fail('Unsupported OS major release') }
       }
     }
@@ -38,7 +38,7 @@ class mysql::server::redhat {
     require => File['/etc/my.cnf']
   }
 
-  if $::selinux != 'false' {
+  if $::selinux == true {
     service { $mysql::params::myservice:
       ensure     => running,
       enable     => true,
@@ -76,7 +76,8 @@ class mysql::server::redhat {
     file { $mysql::params::real_data_dir :
       ensure => directory,
       owner  => 'mysql',
-      group  => 'mysql'
+      group  => 'mysql',
+      require => Package[$mysql_server_dependencies],
     }
 
   }
