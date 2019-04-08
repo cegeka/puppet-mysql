@@ -51,7 +51,7 @@ class mysql::server::redhat {
     }
 
     file_line { 'selinux_context_mysql_datadir':
-      path => '/etc/selinux/targeted/contexts/files/file_contexts.local',
+      path => '/etc/selinux/targeted/contexts/files/file_contexts',
       line => "${mysql::params::real_data_dir}(/.*)? system_u:object_r:mysqld_db_t:s0"
     }
 
