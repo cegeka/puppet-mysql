@@ -29,14 +29,18 @@ class mysql::config::performance::medium {
   if ($mysql::params::real_default_storage_engine == 'InnoDB') {
     mysql::config { 'innodb_file_per_table' :
       value => '1'
-    }
-
-    if ( $mysql::params::real_innodb_buffer_pool_size != undef ) {
-      mysql::config { 'innodb_buffer_pool_size' :
-        value => $mysql::params::real_innodb_buffer_pool_size
       }
     }
-  }
+  if ( $mysql::params::real_innodb_log_file_size != undef ) {
+    mysql::config { 'innodb_log_file_size' :
+      value => $mysql::params::real_innodb_log_file_size
+        }
+    }
+  if ( $mysql::params::real_innodb_buffer_pool_size != undef ) {
+    mysql::config { 'innodb_buffer_pool_size' :
+      value => $mysql::params::real_innodb_buffer_pool_size
+        }
+    }
 
   if ( $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^5\./ ) {
     mysql::config { 'table_cache' :

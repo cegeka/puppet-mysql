@@ -38,6 +38,7 @@ class mysql::params {
   }
 
   $real_innodb_buffer_pool_size = $mysql::server::innodb_buffer_pool_size
+  $real_innodb_log_file_size = $mysql::server::innodb_log_file_size
 
   if ! $mysql::server::instance_type {
     $real_instance_type = 'medium'
