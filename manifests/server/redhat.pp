@@ -166,7 +166,7 @@ class mysql::server::redhat {
   }
 
   exec { 'gen-my.cnf':
-    command     => "/bin/echo -e \"[mysql]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqladmin]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqldump]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqlshow]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[client]\nsocket=${mysql::params::real_data_dir}/mysql.sock\n\" > /root/.my.cnf",
+    command     => "/bin/echo -e \"[mysql]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqladmin]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqldump]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[mysqlshow]\nuser=${real_mysql_user}\npassword=${real_mysql_password}\n[client]\nsocket=${mysql::params::real_data_dir}/mysql.sock\n\" > /root/.my.cnf ; chmod 600 /root/.my.cnf",
     refreshonly => true,
     creates     => '/root/.my.cnf'
   }
