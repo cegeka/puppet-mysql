@@ -52,6 +52,8 @@ end %>')
 
 augeas { "${mysql::params::mycnfctx}/${section}/${name}":
   context => "${mysql::params::mycnfctx}/target[.='${section}']",
+  incl    => "${mysql::params::mycnf}",
+  lens    => "MySQL.lns",
   changes => [
     "set ${mysql::params::mycnfctx}/target[.='${section}'] ${section}",
     $changes,
