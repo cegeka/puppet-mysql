@@ -6,14 +6,14 @@ class mysql::server (
   $instance_type=undef,
   $mysql_libs_obsolete=false,
   $mysql_service_name_override=undef,
-  $log_bin=$::fqdn,
+  $log_bin=$facts['networking']['fqdn'],
   $expire_logs_days='3',
   $implementation=undef
 ) {
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
       'RedHat', 'CentOS': { include mysql::server::redhat }
-      default: { fail("${::operatingsystem} is not yet supported") }
+      default: { fail("${facts['os']['name']} is not yet supported") }
   }
 
 }

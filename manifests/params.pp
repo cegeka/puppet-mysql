@@ -4,7 +4,7 @@
 #
 class mysql::params {
 
-  $mycnf = $::operatingsystem ? {
+  $mycnf = $facts['os']['name'] ? {
     /RedHat|Fedora|CentOS/  => '/etc/my.cnf',
     default                 => '/etc/mysql/my.cnf',
   }
@@ -15,7 +15,7 @@ class mysql::params {
     if ($mysql::server::implementation == 'mariadb') {
       $myservice = 'mariadb'
     } else {
-      $myservice = $::operatingsystem ? {
+      $myservice = $facts['os']['name'] ? {
         /RedHat|Fedora|CentOS/  => 'mysqld',
         default                 => 'mysql',
       }

@@ -19,13 +19,13 @@ class mysql::server::redhat {
     $mysql_server_dependencies = ['mysql-community-server']
   } else {
     if $mysql::server::mysql_libs_obsolete {
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '6': { $mysql_server_dependencies = ['mysql-server'] }
         '7': { $mysql_server_dependencies = ['mariadb-server'] }
         default: { fail('Unsupported OS major release') }
       }
     } else {
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '6': { $mysql_server_dependencies = ['mysql-server','mysql-libs'] }
         '7': { $mysql_server_dependencies = ['mariadb-server','mariadb-libs'] }
         default: { fail('Unsupported OS major release') }
@@ -38,7 +38,7 @@ class mysql::server::redhat {
     require => File['/etc/my.cnf']
   }
 
-  if $::selinux == true {
+  if $facts['os']['selinux']['enabled'] == true {
     service { $mysql::params::myservice:
       ensure     => running,
       enable     => true,
