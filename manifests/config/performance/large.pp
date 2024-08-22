@@ -41,7 +41,7 @@ class mysql::config::performance::large {
     }
   }
 
-  if ( $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^5\./ ) {
+  if ( $facts['osfamily'] == 'RedHat' and $facts['operatingsystemrelease'] =~ /^5\./ ) {
     mysql::config { 'table_cache' :
       value => '256'
     }
