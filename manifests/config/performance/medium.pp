@@ -42,7 +42,7 @@ class mysql::config::performance::medium {
     }
   }
 
-  if ( $facts['osfamily'] == 'RedHat' and $facts['operatingsystemrelease'] =~ /^5\./ ) {
+  if ( $facts['os']['family'] == 'RedHat' and $facts['os']['release']['full'] =~ /^5\./ ) {
     mysql::config { 'table_cache' :
       value => '64'
     }
