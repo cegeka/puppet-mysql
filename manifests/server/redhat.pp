@@ -121,41 +121,16 @@ class mysql::server::redhat {
     content => template('mysql/logrotate.redhat.erb'),
   }
 
-  if $mysql::params::mysql_user { $real_mysql_user = $mysql::params::mysql_user } else { $real_mysql_user = 'root' }
+  $real_mysql_user = 'root'
 
-  if $mysql::params::mysql_password {
+  #$real_mysql_password = generate("/usr/bin/pwgen", 20, 1)
+  $real_mysql_password = ''
 
-    $real_mysql_user = $mysql::params::mysql_user
-
-    if $mysql::mysql_exists == true {
-      mysql_user { "${real_mysql_user}@localhost":
-        ensure        => present,
-        password_hash => mysql_password($real_mysql_password),
-        require       => Exec['gen-my.cnf'],
-      }
-    }
-
-    file { $mysql::params::mylocalcnf:
-      ensure  => present,
-      owner   => root,
-      group   => root,
-      mode    => '0600',
-      content => template('mysql/my.cnf.erb'),
-      require => Exec['init-rootpwd'],
-    }
-
-  } else {
-
-    #$real_mysql_password = generate("/usr/bin/pwgen", 20, 1)
-    $real_mysql_password = ''
-
-    file { $mysql::params::mylocalcnf:
-      owner   => root,
-      group   => root,
-      mode    => '0600',
-      require => Exec['init-rootpwd'],
-    }
-
+  file { $mysql::params::mylocalcnf:
+    owner   => root,
+    group   => root,
+    mode    => '0600',
+    require => Exec['init-rootpwd'],
   }
 
   exec { 'init-rootpwd':
